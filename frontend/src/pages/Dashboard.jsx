@@ -66,27 +66,6 @@ export const Dashboard=()=> {
     },
   ];
 
-  const upcomingAppointments = [
-    {
-      time: "9:00 AM",
-      patient: "Alice Johnson",
-      doctor: "Dr. Sarah Johnson",
-      type: "Consultation",
-    },
-    {
-      time: "10:30 AM",
-      patient: "Mark Thompson",
-      doctor: "Dr. Mike Chen",
-      type: "Follow-up",
-    },
-    {
-      time: "2:00 PM",
-      patient: "Lisa Davis",
-      doctor: "Dr. Emily Davis",
-      type: "Screening",
-    },
-  ];
-
   const getStatusIcon = (status) => {
     switch (status) {
       case "confirmed":
@@ -117,21 +96,18 @@ export const Dashboard=()=> {
     }
   };
 
-  const StatCard = ({
-    icon: Icon,
-    title,
-    value,
-    change,
-    changeType,
-    color,
-  }) => (
+  const StatCard = ({ icon, title, value, change, changeType, color }) => {
+    const IconComponent = icon;
+    const TrendIcon = changeType === "increase" ? ArrowUp : ArrowDown;
+
+    return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow duration-200">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <div
             className={`w-12 h-12 ${color} rounded-lg flex items-center justify-center`}
           >
-            <Icon className="w-6 h-6 text-white" />
+            <IconComponent className="w-6 h-6 text-white" />
           </div>
           <div>
             <p className="text-sm text-gray-500">{title}</p>
@@ -144,17 +120,14 @@ export const Dashboard=()=> {
               changeType === "increase" ? "text-green-600" : "text-red-600"
             }`}
           >
-            {changeType === "increase" ? (
-              <ArrowUp className="w-4 h-4" />
-            ) : (
-              <ArrowDown className="w-4 h-4" />
-            )}
+            <TrendIcon className="w-4 h-4" />
             <span className="text-sm font-medium">{change}%</span>
           </div>
         )}
       </div>
     </div>
-  );
+    );
+  };
 
   return (
     <div className="space-y-6">

@@ -1,28 +1,35 @@
+import { Routes, Route, Navigate } from "react-router-dom";
 import { SidebarProvider } from "./components/Sidebar";
 import { AppLayout } from "./components/AppLayout";
-import { AllRoutes } from "./routes/AllRoutes";
-import { Routes, Route, useLocation } from "react-router-dom";
-import { Login } from "./pages/Login";
-import { Register } from "./pages/Register";
+import {
+  Login,
+  Register,
+  Dashboard,
+  BookAppointment,
+  ManageDoctors,
+  ManageUsers,
+  MyAppointments,
+  ProfileSection,
+} from "./pages";
 
 export default function App() {
-  const location = useLocation();
-  const pathname = location.pathname;
-
   return (
-    <>
-      {pathname === "/" || pathname === "/register" ? (
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
-      ) : (
-        <SidebarProvider>
-          <AppLayout>
-            <AllRoutes />
-          </AppLayout>
-        </SidebarProvider>
-      )}
-    </>
+    <SidebarProvider>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        <Route element={<AppLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/book/:doctorId?" element={<BookAppointment />} />
+          <Route path="/appointments" element={<MyAppointments />} />
+          <Route path="/doctors" element={<ManageDoctors />} />
+          <Route path="/patients" element={<ManageUsers />} />
+          <Route path="/profile" element={<ProfileSection />} />
+        </Route>
+
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Routes>
+    </SidebarProvider>
   );
 }
