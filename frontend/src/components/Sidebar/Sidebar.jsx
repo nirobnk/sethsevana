@@ -5,12 +5,12 @@ import {
   UserCog,
   Calendar,
   CalendarCheck,
-  CreditCard,
   Settings,
   LogOut,
   User,
   Menu,
   ChevronLeft,
+  Bell,
 } from "lucide-react";
 import { useSidebar, SidebarSection, SidebarItem } from "./index";
 
@@ -20,11 +20,16 @@ export const Sidebar = ({ logo = "S", onLogout }) => {
   const menuItems = [
     { icon: LayoutDashboard, label: "Dashboard", to: "/dashboard" },
     { icon: User, label: "Profile", to: "/profile" },
+    { icon: Bell, label: "Notifications", to: "/notifications", badge: "3" },
     { icon: Users, label: "Manage Users", to: "/patients" },
     { icon: UserCog, label: "Manage Doctors", to: "/doctors" },
-    { icon: Calendar, label: "All Appointments", to: "/appointments", badge: "8" },
+    {
+      icon: Calendar,
+      label: "All Appointments",
+      to: "/appointments",
+      badge: "8",
+    },
     { icon: CalendarCheck, label: "Book Appointment", to: "/book" },
-    { icon: CreditCard, label: "Payments", to: "/payments" },
     { icon: Settings, label: "Settings", to: "/settings" },
   ];
 
@@ -57,7 +62,9 @@ export const Sidebar = ({ logo = "S", onLogout }) => {
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-teal-600 text-white font-semibold">
               {logo}
             </div>
-            <span className="text-lg font-semibold text-gray-900">Seth Sevana</span>
+            <span className="text-lg font-semibold text-gray-900">
+              Seth Sevana
+            </span>
           </div>
 
           <button

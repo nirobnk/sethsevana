@@ -9,6 +9,7 @@ import {
   ManageDoctors,
   ManageUsers,
   MyAppointments,
+  Notifications,
   ProfileSection,
 } from "./pages";
 
@@ -23,6 +24,7 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/book/:doctorId?" element={<BookAppointment />} />
           <Route path="/appointments" element={<MyAppointments />} />
+          <Route path="/notifications" element={<Notifications />} />
           <Route path="/doctors" element={<ManageDoctors />} />
           <Route path="/patients" element={<ManageUsers />} />
           <Route path="/profile" element={<ProfileSection />} />

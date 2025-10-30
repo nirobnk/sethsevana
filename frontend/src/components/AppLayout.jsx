@@ -4,7 +4,7 @@ import { useSidebar, Sidebar } from "./Sidebar";
 import { Header } from "./Header";
 
 export const AppLayout = ({
-  title = "Welcome to Seth Sevana Admin Portal",
+  title = "Admin portal",
   subtitle = "Here's what's happening at your clinic today",
   onLogout,
   user,
