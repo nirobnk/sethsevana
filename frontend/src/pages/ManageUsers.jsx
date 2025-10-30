@@ -1,778 +1,638 @@
-
-// import React, { useState } from "react";
-// import { Search, Edit, Trash2, Eye, X, Save, Users, Mail, Phone, User } from "lucide-react";
-
-// export const ManageUsers = () => {
-//   const [users, setUsers] = useState([
-//     {
-//       id: 1,
-//       name: "KVC Niluminda",
-//       email: "niluminda@email.com",
-//       phone: "0743256782",
-//       nic: "20021400234",
-//       dateOfBirth: "2002-11-13",
-//       gender: "Male",
-//       address: "123 Main Street, Colombo 07",
-//       bloodGroup: "O+",
-//       emergencyContact: "0771234567",
-//       emergencyContactName: "Mother - Mrs. Niluminda",
-//       registrationDate: "2023-01-15",
-//       appointmentsCount: 12
-//     },
-//     {
-//       id: 2,
-//       name: "Sarah Fernando",
-//       email: "sarah.fernando@email.com",
-//       phone: "0712345678",
-//       nic: "19951234567",
-//       dateOfBirth: "1995-06-20",
-//       gender: "Female",
-//       address: "456 Oak Avenue, Kandy",
-//       bloodGroup: "A+",
-//       emergencyContact: "0723456789",
-//       emergencyContactName: "Husband - Mr. Fernando",
-//       registrationDate: "2023-03-22",
-//       appointmentsCount: 8
-//     },
-//     {
-//       id: 3,
-//       name: "Rajesh Kumar",
-//       email: "rajesh.kumar@email.com",
-//       phone: "0776543210",
-//       nic: "19801567890",
-//       dateOfBirth: "1980-12-05",
-//       gender: "Male",
-//       address: "789 Park Road, Galle",
-//       bloodGroup: "B-",
-//       emergencyContact: "0754321098",
-//       emergencyContactName: "Wife - Mrs. Kumar",
-//       registrationDate: "2022-11-10",
-//       appointmentsCount: 5
-//     },
-//     {
-//       id: 4,
-//       name: "Priya Jayasinghe",
-//       email: "priya.jayasinghe@email.com",
-//       phone: "0789876543",
-//       nic: "19920987654",
-//       dateOfBirth: "1992-08-14",
-//       gender: "Female",
-//       address: "321 Beach Road, Negombo",
-//       bloodGroup: "AB+",
-//       emergencyContact: "0765432109",
-//       emergencyContactName: "Father - Mr. Jayasinghe",
-//       registrationDate: "2023-07-08",
-//       appointmentsCount: 15
-//     }
-//   ]);
-
- 
-//   const [showModal, setShowModal] = useState(false);
-//   const [modalMode, setModalMode] = useState('view'); // 'edit', 'view'
-//   const [selectedUser, setSelectedUser] = useState(null);
-//   const [formData, setFormData] = useState({
-//     name: '',
-//     email: '',
-//     phone: '',
-//     nic: '',
-//     dateOfBirth: '',
-//     gender: 'Male',
-//     address: '',
-//     bloodGroup: 'O+',
-//     emergencyContact: '',
-//     emergencyContactName: ''
-//   });
-
-//   const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
-
-
-//   const openModal = (mode, user) => {
-//     setModalMode(mode);
-//     setSelectedUser(user);
-//     if (mode === 'edit') {
-//       setFormData({
-//         name: user.name,
-//         email: user.email,
-//         phone: user.phone,
-//         nic: user.nic,
-//         dateOfBirth: user.dateOfBirth,
-//         gender: user.gender,
-//         address: user.address,
-//         bloodGroup: user.bloodGroup,
-//         emergencyContact: user.emergencyContact,
-//         emergencyContactName: user.emergencyContactName
-//       });
-//     }
-//     setShowModal(true);
-//   };
-
-//   const closeModal = () => {
-//     setShowModal(false);
-//     setSelectedUser(null);
-//   };
-
-//   const handleEdit = (e) => {
-//     e.preventDefault();
-//     setUsers(users.map(user => 
-//       user.id === selectedUser.id 
-//         ? { ...user, ...formData }
-//         : user
-//     ));
-//     closeModal();
-//   };
-
-//   const handleDelete = (userId) => {
-//     if (window.confirm('Are you sure you want to delete this user?')) {
-//       setUsers(users.filter(user => user.id !== userId));
-//     }
-//   };
-
-//   const calculateAge = (dateOfBirth) => {
-//     const today = new Date();
-//     const birthDate = new Date(dateOfBirth);
-//     let age = today.getFullYear() - birthDate.getFullYear();
-//     const monthDiff = today.getMonth() - birthDate.getMonth();
-//     if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-//       age--;
-//     }
-//     return age;
-//   };
-
-//   return (
-//     <div className="space-y-6">
-//       {/* Header */}
-//       <div className="bg-gradient-to-r from-teal-50 to-blue-50 rounded-xl p-6 border border-teal-100">
-//         <div className="flex items-center justify-between">
-//           <div className="flex items-center space-x-4">
-//             <div className="w-12 h-12 bg-gradient-to-br from-teal-500 to-blue-600 rounded-lg flex items-center justify-center">
-//               <Users className="w-6 h-6 text-white" />
-//             </div>
-//             <div>
-//               <h1 className="text-2xl font-bold text-gray-900">Manage Users</h1>
-//               <p className="text-gray-600">
-//                 Add, edit, and manage patient information
-//               </p>
-//             </div>
-//           </div>
-          
-//         </div>
-//       </div>
-
-      
-
-//       {/* Users List */}
-//       <div className="space-y-4">
-//         {users.map((user) => (
-//           <div key={user.id} className="bg-white rounded-lg p-6 shadow-sm border hover:shadow-md transition-shadow">
-//             {/* User Header */}
-//             <div className="flex justify-between items-start mb-4">
-//               <div className="flex items-center space-x-4">
-//                 <div className="w-12 h-12 bg-teal-500 rounded-lg flex items-center justify-center text-white font-bold">
-//                   {user.name.split(' ').map(n => n[0]).join('')}
-//                 </div>
-//                 <div>
-//                   <h3 className="text-lg font-semibold text-gray-900">{user.name}</h3>
-//                   <p className="text-sm text-gray-600">ID: {user.nic}</p>
-//                 </div>
-//               </div>
-//               <div className="flex items-center space-x-2">
-//                 <button
-//                   onClick={() => openModal('view', user)}
-//                   className="p-2 text-gray-400 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition-colors"
-//                   title="View Details"
-//                 >
-//                   <Eye className="w-4 h-4" />
-//                 </button>
-//                 <button
-//                   onClick={() => openModal('edit', user)}
-//                   className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-//                   title="Edit User"
-//                 >
-//                   <Edit className="w-4 h-4" />
-//                 </button>
-//                 <button
-//                   onClick={() => handleDelete(user.id)}
-//                   className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-//                   title="Delete User"
-//                 >
-//                   <Trash2 className="w-4 h-4" />
-//                 </button>
-//               </div>
-//             </div>
-
-//             {/* User Info Grid */}
-//             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-//               <div className="flex items-center space-x-2">
-//                 <Mail className="w-4 h-4 text-gray-400" />
-//                 <span className="text-gray-600">{user.email}</span>
-//               </div>
-//               <div className="flex items-center space-x-2">
-//                 <Phone className="w-4 h-4 text-gray-400" />
-//                 <span className="text-gray-600">{user.phone}</span>
-//               </div>
-//               <div className="text-gray-600">
-//                 <span className="font-medium">Age:</span> {calculateAge(user.dateOfBirth)} years
-//               </div>
-//               <div className="text-gray-600">
-//                 <span className="font-medium">Gender:</span> {user.gender}
-//               </div>
-//               <div className="text-gray-600">
-//                 <span className="font-medium">Blood Group:</span> <span className="text-red-600">{user.bloodGroup}</span>
-//               </div>
-//               <div className="text-gray-600">
-//                 <span className="font-medium">Appointments:</span> {user.appointmentsCount}
-//               </div>
-//             </div>
-//           </div>
-//         ))}
-//       </div>
-
-     
-
-//       {/* Modal */}
-//       {showModal && (
-//         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-//           <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-//             <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-//               <h2 className="text-xl font-bold text-gray-900">
-//                 {modalMode === 'edit' ? 'Edit User' : 'User Details'}
-//               </h2>
-//               <button
-//                 onClick={closeModal}
-//                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-//               >
-//                 <X className="w-5 h-5 text-gray-500" />
-//               </button>
-//             </div>
-
-//             <div className="p-6">
-//               {modalMode === 'view' ? (
-//                 <div className="space-y-6">
-//                   {/* User Profile Header */}
-//                   <div className="flex items-center space-x-4 bg-gray-50 rounded-lg p-4">
-//                     <div className="w-16 h-16 bg-teal-500 rounded-lg flex items-center justify-center text-white font-bold text-xl">
-//                       {selectedUser?.name.split(' ').map(n => n[0]).join('')}
-//                     </div>
-//                     <div>
-//                       <h3 className="text-xl font-bold text-gray-900">{selectedUser?.name}</h3>
-//                       <p className="text-gray-600">{selectedUser?.email}</p>
-//                       <p className="text-sm text-gray-500">Patient ID: {selectedUser?.nic}</p>
-//                     </div>
-//                   </div>
-
-//                   {/* User Details */}
-//                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-//                     <div>
-//                       <h4 className="font-semibold text-gray-900 mb-3">Personal Information</h4>
-//                       <div className="space-y-2 text-sm">
-//                         <div><span className="text-gray-500">Full Name:</span> <span className="font-medium">{selectedUser?.name}</span></div>
-//                         <div><span className="text-gray-500">Date of Birth:</span> <span className="font-medium">{selectedUser?.dateOfBirth}</span></div>
-//                         <div><span className="text-gray-500">Age:</span> <span className="font-medium">{calculateAge(selectedUser?.dateOfBirth)} years</span></div>
-//                         <div><span className="text-gray-500">Gender:</span> <span className="font-medium">{selectedUser?.gender}</span></div>
-//                         <div><span className="text-gray-500">NIC:</span> <span className="font-medium">{selectedUser?.nic}</span></div>
-//                       </div>
-//                     </div>
-                    
-//                     <div>
-//                       <h4 className="font-semibold text-gray-900 mb-3">Contact Information</h4>
-//                       <div className="space-y-2 text-sm">
-//                         <div><span className="text-gray-500">Email:</span> <span className="font-medium">{selectedUser?.email}</span></div>
-//                         <div><span className="text-gray-500">Phone:</span> <span className="font-medium">{selectedUser?.phone}</span></div>
-//                         <div><span className="text-gray-500">Address:</span> <span className="font-medium">{selectedUser?.address}</span></div>
-//                         <div><span className="text-gray-500">Emergency Contact:</span> <span className="font-medium">{selectedUser?.emergencyContact}</span></div>
-//                         <div><span className="text-gray-500">Emergency Person:</span> <span className="font-medium">{selectedUser?.emergencyContactName}</span></div>
-//                       </div>
-//                     </div>
-//                   </div>
-
-//                   <div className="bg-gray-50 rounded-lg p-4">
-//                     <h4 className="font-semibold text-gray-900 mb-2">Medical & Activity Information</h4>
-//                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-//                       <div><span className="text-gray-500">Blood Group:</span> <span className="font-medium text-red-600">{selectedUser?.bloodGroup}</span></div>
-//                       <div><span className="text-gray-500">Registration:</span> <span className="font-medium">{selectedUser?.registrationDate}</span></div>
-//                       <div><span className="text-gray-500">Appointments:</span> <span className="font-medium">{selectedUser?.appointmentsCount}</span></div>
-//                     </div>
-//                   </div>
-//                 </div>
-//               ) : (
-//                 <form onSubmit={handleEdit} className="space-y-6">
-//                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-//                     <div>
-//                       <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
-//                       <input
-//                         type="text"
-//                         required
-//                         value={formData.name}
-//                         onChange={(e) => setFormData({...formData, name: e.target.value})}
-//                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-//                       />
-//                     </div>
-
-//                     <div>
-//                       <label className="block text-sm font-medium text-gray-700 mb-2">NIC Number</label>
-//                       <input
-//                         type="text"
-//                         required
-//                         value={formData.nic}
-//                         onChange={(e) => setFormData({...formData, nic: e.target.value})}
-//                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-//                       />
-//                     </div>
-
-//                     <div>
-//                       <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-//                       <input
-//                         type="email"
-//                         required
-//                         value={formData.email}
-//                         onChange={(e) => setFormData({...formData, email: e.target.value})}
-//                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-//                       />
-//                     </div>
-
-//                     <div>
-//                       <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
-//                       <input
-//                         type="tel"
-//                         required
-//                         value={formData.phone}
-//                         onChange={(e) => setFormData({...formData, phone: e.target.value})}
-//                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-//                       />
-//                     </div>
-
-//                     <div>
-//                       <label className="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
-//                       <input
-//                         type="date"
-//                         required
-//                         value={formData.dateOfBirth}
-//                         onChange={(e) => setFormData({...formData, dateOfBirth: e.target.value})}
-//                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-//                       />
-//                     </div>
-
-//                     <div>
-//                       <label className="block text-sm font-medium text-gray-700 mb-2">Gender</label>
-//                       <select
-//                         required
-//                         value={formData.gender}
-//                         onChange={(e) => setFormData({...formData, gender: e.target.value})}
-//                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-//                       >
-//                         <option value="Male">Male</option>
-//                         <option value="Female">Female</option>
-//                       </select>
-//                     </div>
-
-//                     <div>
-//                       <label className="block text-sm font-medium text-gray-700 mb-2">Blood Group</label>
-//                       <select
-//                         required
-//                         value={formData.bloodGroup}
-//                         onChange={(e) => setFormData({...formData, bloodGroup: e.target.value})}
-//                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-//                       >
-//                         {bloodGroups.map(group => (
-//                           <option key={group} value={group}>{group}</option>
-//                         ))}
-//                       </select>
-//                     </div>
-
-//                     <div>
-//                       <label className="block text-sm font-medium text-gray-700 mb-2">Emergency Contact</label>
-//                       <input
-//                         type="tel"
-//                         required
-//                         value={formData.emergencyContact}
-//                         onChange={(e) => setFormData({...formData, emergencyContact: e.target.value})}
-//                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-//                       />
-//                     </div>
-//                   </div>
-
-//                   <div>
-//                     <label className="block text-sm font-medium text-gray-700 mb-2">Address</label>
-//                     <textarea
-//                       required
-//                       rows="2"
-//                       value={formData.address}
-//                       onChange={(e) => setFormData({...formData, address: e.target.value})}
-//                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-//                     />
-//                   </div>
-
-//                   <div>
-//                     <label className="block text-sm font-medium text-gray-700 mb-2">Emergency Contact Name</label>
-//                     <input
-//                       type="text"
-//                       required
-//                       value={formData.emergencyContactName}
-//                       onChange={(e) => setFormData({...formData, emergencyContactName: e.target.value})}
-//                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-//                       placeholder="Mother - Mrs. Doe"
-//                     />
-//                   </div>
-
-//                   <div className="flex justify-end space-x-4 pt-4 border-t border-gray-200">
-//                     <button
-//                       type="button"
-//                       onClick={closeModal}
-//                       className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-//                     >
-//                       Cancel
-//                     </button>
-//                     <button
-//                       type="submit"
-//                       className="flex items-center space-x-2 px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
-//                     >
-//                       <Save className="w-4 h-4" />
-//                       <span>Save Changes</span>
-//                     </button>
-//                   </div>
-//                 </form>
-//               )}
-//             </div>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
-  Plus,
-  Search,
-  Filter,
+  Activity,
+  Calendar,
   Edit,
-  Trash2,
   Eye,
-  X,
-  Save,
-  Users,
   Mail,
   Phone,
+  Save,
+  Search,
+  Trash2,
   User,
-  Calendar,
-  Heart,
-  ChevronDown,
-  CheckCircle,
-  Clock,
-  AlertCircle,
+  UserPlus,
+  Users,
+  X,
 } from "lucide-react";
 
-export const ManageUsers = () => {
-  const [users, setUsers] = useState([
-    {
-      id: 1,
-      name: "KVC Niluminda",
-      email: "niluminda@email.com",
-      phone: "0743256782",
-      nic: "20021400234",
-      dateOfBirth: "2002-11-13",
-      gender: "Male",
-      address: "123 Main Street, Colombo 07",
-      bloodGroup: "O+",
-      emergencyContact: "0771234567",
-      emergencyContactName: "Mother - Mrs. Niluminda",
-      registrationDate: "2023-01-15",
-      appointmentsCount: 12,
-      status: "active",
-    },
-    {
-      id: 2,
-      name: "Sarah Fernando",
-      email: "sarah.fernando@email.com",
-      phone: "0712345678",
-      nic: "19951234567",
-      dateOfBirth: "1995-06-20",
-      gender: "Female",
-      address: "456 Oak Avenue, Kandy",
-      bloodGroup: "A+",
-      emergencyContact: "0723456789",
-      emergencyContactName: "Husband - Mr. Fernando",
-      registrationDate: "2023-03-22",
-      appointmentsCount: 8,
-      status: "inactive",
-    },
-    {
-      id: 3,
-      name: "Rajesh Kumar",
-      email: "rajesh.kumar@email.com",
-      phone: "0776543210",
-      nic: "19801567890",
-      dateOfBirth: "1980-12-05",
-      gender: "Male",
-      address: "789 Park Road, Galle",
-      bloodGroup: "B-",
-      emergencyContact: "0754321098",
-      emergencyContactName: "Wife - Mrs. Kumar",
-      registrationDate: "2022-11-10",
-      appointmentsCount: 5,
-      status: "active",
-    },
-  ]);
+const initialUsers = [
+  {
+    id: 1,
+    name: "KVC Niluminda",
+    email: "niluminda@email.com",
+    phone: "0743256782",
+    nic: "20021400234",
+    dateOfBirth: "2002-11-13",
+    gender: "Male",
+    address: "123 Main Street, Colombo 07",
+    bloodGroup: "O+",
+    emergencyContact: "0771234567",
+    emergencyContactName: "Mother - Mrs. Niluminda",
+    registrationDate: "2023-01-15",
+    appointmentsCount: 12,
+    status: "active",
+  },
+  {
+    id: 2,
+    name: "Sarah Fernando",
+    email: "sarah.fernando@email.com",
+    phone: "0712345678",
+    nic: "19951234567",
+    dateOfBirth: "1995-06-20",
+    gender: "Female",
+    address: "456 Oak Avenue, Kandy",
+    bloodGroup: "A+",
+    emergencyContact: "0723456789",
+    emergencyContactName: "Husband - Mr. Fernando",
+    registrationDate: "2023-03-22",
+    appointmentsCount: 8,
+    status: "active",
+  },
+  {
+    id: 3,
+    name: "Rajesh Kumar",
+    email: "rajesh.kumar@email.com",
+    phone: "0759876543",
+    nic: "19880345678",
+    dateOfBirth: "1988-08-10",
+    gender: "Male",
+    address: "789 Palm Grove, Galle",
+    bloodGroup: "B+",
+    emergencyContact: "0718765432",
+    emergencyContactName: "Wife - Mrs. Kumar",
+    registrationDate: "2022-11-05",
+    appointmentsCount: 15,
+    status: "inactive",
+  },
+];
 
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState("all");
-  const [showModal, setShowModal] = useState(false);
-  const [modalMode, setModalMode] = useState("add");
-  const [selectedUser, setSelectedUser] = useState(null);
+const emptyFormState = {
+  name: "",
+  email: "",
+  phone: "",
+  nic: "",
+  dateOfBirth: "",
+  gender: "",
+  address: "",
+  bloodGroup: "",
+  emergencyContact: "",
+  emergencyContactName: "",
+};
 
-  const filteredUsers = users.filter((user) => {
-    const matchesSearch =
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus =
-      selectedStatus === "all" || user.status === selectedStatus;
-    return matchesSearch && matchesStatus;
+const calculateAge = (dateString) => {
+  if (!dateString) {
+    return "-";
+  }
+  const today = new Date();
+  const birthDate = new Date(dateString);
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDifference = today.getMonth() - birthDate.getMonth();
+
+  if (
+    monthDifference < 0 ||
+    (monthDifference === 0 && today.getDate() < birthDate.getDate())
+  ) {
+    age -= 1;
+  }
+
+  return age;
+};
+
+const formatDate = (dateString) => {
+  if (!dateString) {
+    return "-";
+  }
+  return new Date(dateString).toLocaleDateString("en-GB", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
   });
+};
+
+export const ManageUsers = () => {
+  const [users, setUsers] = useState(initialUsers);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [modalMode, setModalMode] = useState("view");
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [formData, setFormData] = useState(emptyFormState);
+
+  const filteredUsers = useMemo(() => {
+    const normalizedSearch = searchTerm.trim().toLowerCase();
+    if (!normalizedSearch) {
+      return users;
+    }
+
+    return users.filter((user) => {
+      return [user.name, user.email, user.phone, user.nic]
+        .filter(Boolean)
+        .some((value) => value.toLowerCase().includes(normalizedSearch));
+    });
+  }, [searchTerm, users]);
+
+  const stats = useMemo(() => {
+    const activeUsers = users.filter((user) => user.status === "active").length;
+    const totalAppointments = users.reduce(
+      (sum, user) => sum + (user.appointmentsCount ?? 0),
+      0,
+    );
+
+    const thisMonth = new Date().toISOString().slice(0, 7);
+    const newRegistrations = users.filter((user) =>
+      user.registrationDate.startsWith(thisMonth),
+    ).length;
+
+    return {
+      total: users.length,
+      active: activeUsers,
+      appointments: totalAppointments,
+      newRegistrations,
+    };
+  }, [users]);
 
   const openModal = (mode, user = null) => {
     setModalMode(mode);
     setSelectedUser(user);
+    if (mode === "add" || !user) {
+      setFormData(emptyFormState);
+    } else {
+      setFormData({
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        nic: user.nic,
+        dateOfBirth: user.dateOfBirth,
+        gender: user.gender,
+        address: user.address,
+        bloodGroup: user.bloodGroup,
+        emergencyContact: user.emergencyContact,
+        emergencyContactName: user.emergencyContactName,
+      });
+    }
     setShowModal(true);
   };
 
   const closeModal = () => {
     setShowModal(false);
     setSelectedUser(null);
+    setFormData(emptyFormState);
+  };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    if (modalMode === "add") {
+      const nextId = users.length
+        ? Math.max(...users.map((user) => user.id)) + 1
+        : 1;
+      const newUser = {
+        ...formData,
+        id: nextId,
+        status: "active",
+        appointmentsCount: 0,
+        registrationDate: new Date().toISOString().split("T")[0],
+      };
+      setUsers((prev) => [...prev, newUser]);
+    }
+
+    if (modalMode === "edit" && selectedUser) {
+      setUsers((prev) =>
+        prev.map((user) =>
+          user.id === selectedUser.id
+            ? {
+                ...user,
+                ...formData,
+              }
+            : user,
+        ),
+      );
+    }
+
+    closeModal();
   };
 
   const handleDelete = (userId) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
-      setUsers(users.filter((user) => user.id !== userId));
+    if (window.confirm("Are you sure you want to remove this user?")) {
+      setUsers((prev) => prev.filter((user) => user.id !== userId));
     }
   };
 
-  const toggleStatus = (userId) => {
-    setUsers(
-      users.map((u) =>
-        u.id === userId
-          ? { ...u, status: u.status === "active" ? "inactive" : "active" }
-          : u
-      )
+  const renderStatusBadge = (status) => {
+    const styles =
+      status === "active"
+        ? "bg-emerald-100 text-emerald-700"
+        : "bg-amber-100 text-amber-700";
+    return (
+      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${styles}`}>
+        {status === "active" ? "Active" : "Inactive"}
+      </span>
     );
   };
 
-  const calculateAge = (dob) => {
-    const birthDate = new Date(dob);
-    const diff = Date.now() - birthDate.getTime();
-    return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
-  };
+  const isReadOnly = modalMode === "view";
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-teal-50 to-blue-50 rounded-xl p-6 border border-teal-100 flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-teal-500 to-blue-600 rounded-lg flex items-center justify-center">
-            <Users className="w-6 h-6 text-white" />
+      <div className="rounded-xl border border-teal-100 bg-gradient-to-r from-teal-50 to-blue-50 p-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-teal-500 to-blue-600">
+              <Users className="h-6 w-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Manage Patients</h1>
+              <p className="text-gray-600">
+                Search, review, and manage patient information effortlessly
+              </p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Manage Users</h1>
-            <p className="text-gray-600">Add, edit, and manage patient profiles</p>
-          </div>
-        </div>
-        <button
-          onClick={() => openModal("add")}
-          className="flex items-center space-x-2 bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition-colors shadow-sm"
-        >
-          <Plus className="w-5 h-5" />
-          <span className="font-medium">Add New User</span>
-        </button>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex items-center space-x-3">
-          <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-            <Users className="w-5 h-5 text-blue-600" />
-          </div>
-          <div>
-            <p className="text-sm text-gray-500">Total Users</p>
-            <p className="text-2xl font-bold text-gray-900">{users.length}</p>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex items-center space-x-3">
-          <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-            <CheckCircle className="w-5 h-5 text-green-600" />
-          </div>
-          <div>
-            <p className="text-sm text-gray-500">Active Users</p>
-            <p className="text-2xl font-bold text-green-600">
-              {users.filter((u) => u.status === "active").length}
-            </p>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex items-center space-x-3">
-          <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
-            <Clock className="w-5 h-5 text-orange-600" />
-          </div>
-          <div>
-            <p className="text-sm text-gray-500">Inactive Users</p>
-            <p className="text-2xl font-bold text-orange-600">
-              {users.filter((u) => u.status === "inactive").length}
-            </p>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex items-center space-x-3">
-          <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
-            <Heart className="w-5 h-5 text-red-600" />
-          </div>
-          <div>
-            <p className="text-sm text-gray-500">Total Appointments</p>
-            <p className="text-2xl font-bold text-red-600">
-              {users.reduce((sum, u) => sum + u.appointmentsCount, 0)}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Search + Filter */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col lg:flex-row lg:items-center lg:space-x-4 space-y-4 lg:space-y-0">
-        <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-          <input
-            type="text"
-            placeholder="Search users by name or email..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-          />
-        </div>
-        <div className="relative">
-          <select
-            value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value)}
-            className="appearance-none pl-4 pr-8 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white"
+          <button
+            type="button"
+            onClick={() => openModal("add")}
+            className="inline-flex items-center gap-2 rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-teal-700"
           >
-            <option value="all">All Status</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
-          <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <UserPlus className="h-4 w-4" />
+            Add New Patient
+          </button>
         </div>
       </div>
 
-      {/* Users Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-100">
+              <Users className="h-5 w-5 text-teal-600" />
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">Total Patients</p>
+              <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
+            </div>
+          </div>
+        </div>
+        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100">
+              <User className="h-5 w-5 text-emerald-600" />
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">Active Patients</p>
+              <p className="text-2xl font-bold text-emerald-600">{stats.active}</p>
+            </div>
+          </div>
+        </div>
+        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100">
+              <Activity className="h-5 w-5 text-blue-600" />
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">Appointments Completed</p>
+              <p className="text-2xl font-bold text-blue-600">{stats.appointments}</p>
+            </div>
+          </div>
+        </div>
+        <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100">
+              <Calendar className="h-5 w-5 text-purple-600" />
+            </div>
+            <div>
+              <p className="text-sm text-gray-500">New This Month</p>
+              <p className="text-2xl font-bold text-purple-600">{stats.newRegistrations}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="relative w-full lg:max-w-md">
+            <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
+            <input
+              type="search"
+              placeholder="Search patients by name, email, phone, or NIC"
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              className="w-full rounded-lg border border-gray-300 bg-white py-2 pl-10 pr-4 text-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-teal-500"
+            />
+          </div>
+          <p className="text-sm text-gray-500">
+            Showing <span className="font-medium text-gray-900">{filteredUsers.length}</span> results
+          </p>
+        </div>
+      </div>
+
+      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b border-gray-200 text-gray-600 uppercase text-xs">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-4 text-left">User</th>
-                <th className="px-6 py-4 text-left">Contact</th>
-                <th className="px-6 py-4 text-left">Gender</th>
-                <th className="px-6 py-4 text-left">Blood</th>
-                <th className="px-6 py-4 text-left">Appointments</th>
-                <th className="px-6 py-4 text-left">Status</th>
-                <th className="px-6 py-4 text-right">Actions</th>
+                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  Patient
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  Contact
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  Registered
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  Appointments
+                </th>
+                <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  Status
+                </th>
+                <th className="px-6 py-4 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
+                  Actions
+                </th>
               </tr>
             </thead>
-            <tbody>
-              {filteredUsers.length === 0 ? (
-                <tr>
-                  <td colSpan="7" className="text-center py-10 text-gray-500">
-                    <AlertCircle className="w-6 h-6 text-gray-400 mx-auto mb-2" />
-                    No users found
+            <tbody className="divide-y divide-gray-200 bg-white">
+              {filteredUsers.map((user) => (
+                <tr key={user.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-teal-100 text-sm font-semibold text-teal-700">
+                        {user.name
+                          .split(" ")
+                          .map((part) => part[0])
+                          .join("")
+                          .slice(0, 2)
+                          .toUpperCase()}
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-gray-900">{user.name}</p>
+                        <p className="text-xs text-gray-500">NIC: {user.nic}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-600">
+                    <div className="flex flex-col gap-1">
+                      <span className="flex items-center gap-2">
+                        <Mail className="h-4 w-4 text-gray-400" />
+                        {user.email}
+                      </span>
+                      <span className="flex items-center gap-2">
+                        <Phone className="h-4 w-4 text-gray-400" />
+                        {user.phone}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-600">
+                    <div className="flex flex-col gap-1">
+                      <span>Age: {calculateAge(user.dateOfBirth)}</span>
+                      <span>Joined {formatDate(user.registrationDate)}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-600">
+                    <span className="font-semibold text-gray-900">
+                      {user.appointmentsCount}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">{renderStatusBadge(user.status)}</td>
+                  <td className="px-6 py-4">
+                    <div className="flex justify-end gap-2">
+                      <button
+                        type="button"
+                        onClick={() => openModal("view", user)}
+                        className="rounded-lg border border-gray-200 p-2 text-gray-600 transition-colors hover:border-teal-200 hover:text-teal-600"
+                        aria-label="View details"
+                      >
+                        <Eye className="h-4 w-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => openModal("edit", user)}
+                        className="rounded-lg border border-gray-200 p-2 text-gray-600 transition-colors hover:border-blue-200 hover:text-blue-600"
+                        aria-label="Edit user"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(user.id)}
+                        className="rounded-lg border border-gray-200 p-2 text-gray-600 transition-colors hover:border-red-200 hover:text-red-600"
+                        aria-label="Delete user"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
-              ) : (
-                filteredUsers.map((user) => (
-                  <tr
-                    key={user.id}
-                    className="hover:bg-gray-50 border-b transition-colors"
-                  >
-                    <td className="px-6 py-4 font-medium text-gray-900 flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-teal-500 to-blue-600 rounded-lg flex items-center justify-center text-white font-semibold">
-                        {user.name.split(" ").map((n) => n[0]).join("")}
-                      </div>
-                      <span>{user.name}</span>
-                    </td>
-                    <td className="px-6 py-4 text-gray-700">
-                      <div className="flex items-center space-x-2">
-                        <Mail className="w-4 h-4 text-gray-400" />
-                        <span>{user.email}</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Phone className="w-4 h-4 text-gray-400" />
-                        <span>{user.phone}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-gray-700">{user.gender}</td>
-                    <td className="px-6 py-4 text-red-600 font-medium">
-                      {user.bloodGroup}
-                    </td>
-                    <td className="px-6 py-4 text-gray-700 text-center">
-                      {user.appointmentsCount}
-                    </td>
-                    <td className="px-6 py-4">
-                      <button
-                        onClick={() => toggleStatus(user.id)}
-                        className={`px-3 py-1 text-xs rounded-full font-medium ${
-                          user.status === "active"
-                            ? "bg-green-100 text-green-800 hover:bg-green-200"
-                            : "bg-orange-100 text-orange-800 hover:bg-orange-200"
-                        }`}
-                      >
-                        {user.status === "active" ? "Active" : "Inactive"}
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 text-right space-x-2">
-                      <button
-                        onClick={() => openModal("view", user)}
-                        className="p-2 text-gray-400 hover:text-teal-600 hover:bg-teal-50 rounded-lg"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => openModal("edit", user)}
-                        className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg"
-                      >
-                        <Edit className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(user.id)}
-                        className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
+              ))}
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full p-6 relative">
-            <button
-              onClick={closeModal}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-            >
-              <X className="w-5 h-5" />
-            </button>
-            <h2 className="text-xl font-bold mb-4 text-gray-900">
-              {modalMode === "add"
-                ? "Add New User"
-                : modalMode === "edit"
-                ? "Edit User"
-                : "View User"}
-            </h2>
-            <p className="text-gray-600">
-              {modalMode === "view"
-                ? `User: ${selectedUser?.name}`
-                : "Form content goes here..."}
-            </p>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-6">
+          <div className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white shadow-2xl">
+            <div className="sticky top-0 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4">
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  {modalMode === "add" && "Add New Patient"}
+                  {modalMode === "view" && "Patient Details"}
+                  {modalMode === "edit" && "Edit Patient"}
+                </h2>
+                {selectedUser && modalMode !== "add" && (
+                  <p className="text-sm text-gray-500">Last updated {formatDate(selectedUser.registrationDate)}</p>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={closeModal}
+                className="rounded-lg p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
+                aria-label="Close modal"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="px-6 py-6">
+              {isReadOnly ? (
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div>
+                      <p className="text-xs font-semibold uppercase text-gray-500">Full Name</p>
+                      <p className="mt-1 text-sm text-gray-900">{selectedUser?.name}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase text-gray-500">Email</p>
+                      <p className="mt-1 text-sm text-gray-900">{selectedUser?.email}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase text-gray-500">Phone</p>
+                      <p className="mt-1 text-sm text-gray-900">{selectedUser?.phone}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase text-gray-500">NIC</p>
+                      <p className="mt-1 text-sm text-gray-900">{selectedUser?.nic}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase text-gray-500">Date of Birth</p>
+                      <p className="mt-1 text-sm text-gray-900">{formatDate(selectedUser?.dateOfBirth)}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase text-gray-500">Gender</p>
+                      <p className="mt-1 text-sm text-gray-900">{selectedUser?.gender}</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div>
+                      <p className="text-xs font-semibold uppercase text-gray-500">Address</p>
+                      <p className="mt-1 text-sm text-gray-900">{selectedUser?.address}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase text-gray-500">Emergency Contact</p>
+                      <p className="mt-1 text-sm text-gray-900">
+                        {selectedUser?.emergencyContactName} - {selectedUser?.emergencyContact}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase text-gray-500">Blood Group</p>
+                      <p className="mt-1 text-sm text-red-600">{selectedUser?.bloodGroup}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase text-gray-500">Appointments Completed</p>
+                      <p className="mt-1 text-sm text-gray-900">{selectedUser?.appointmentsCount}</p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <label className="flex flex-col text-sm font-medium text-gray-700">
+                      Full Name
+                      <input
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        required
+                        className="mt-1 rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      />
+                    </label>
+                    <label className="flex flex-col text-sm font-medium text-gray-700">
+                      Email Address
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
+                        className="mt-1 rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      />
+                    </label>
+                    <label className="flex flex-col text-sm font-medium text-gray-700">
+                      Phone Number
+                      <input
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        required
+                        className="mt-1 rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      />
+                    </label>
+                    <label className="flex flex-col text-sm font-medium text-gray-700">
+                      NIC Number
+                      <input
+                        name="nic"
+                        value={formData.nic}
+                        onChange={handleInputChange}
+                        required
+                        className="mt-1 rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      />
+                    </label>
+                    <label className="flex flex-col text-sm font-medium text-gray-700">
+                      Date of Birth
+                      <input
+                        type="date"
+                        name="dateOfBirth"
+                        value={formData.dateOfBirth}
+                        onChange={handleInputChange}
+                        className="mt-1 rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      />
+                    </label>
+                    <label className="flex flex-col text-sm font-medium text-gray-700">
+                      Gender
+                      <select
+                        name="gender"
+                        value={formData.gender}
+                        onChange={handleInputChange}
+                        className="mt-1 rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      >
+                        <option value="">Select gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </label>
+                    <label className="flex flex-col text-sm font-medium text-gray-700 md:col-span-2">
+                      Address
+                      <textarea
+                        name="address"
+                        value={formData.address}
+                        onChange={handleInputChange}
+                        rows={2}
+                        className="mt-1 rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      />
+                    </label>
+                    <label className="flex flex-col text-sm font-medium text-gray-700">
+                      Blood Group
+                      <input
+                        name="bloodGroup"
+                        value={formData.bloodGroup}
+                        onChange={handleInputChange}
+                        className="mt-1 rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      />
+                    </label>
+                    <label className="flex flex-col text-sm font-medium text-gray-700">
+                      Emergency Contact Name
+                      <input
+                        name="emergencyContactName"
+                        value={formData.emergencyContactName}
+                        onChange={handleInputChange}
+                        className="mt-1 rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      />
+                    </label>
+                    <label className="flex flex-col text-sm font-medium text-gray-700">
+                      Emergency Contact Number
+                      <input
+                        name="emergencyContact"
+                        value={formData.emergencyContact}
+                        onChange={handleInputChange}
+                        className="mt-1 rounded-lg border border-gray-300 px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      />
+                    </label>
+                  </div>
+
+                  <div className="flex justify-end gap-3">
+                    <button
+                      type="button"
+                      onClick={closeModal}
+                      className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="inline-flex items-center gap-2 rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-teal-700"
+                    >
+                      <Save className="h-4 w-4" />
+                      Save Changes
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
           </div>
         </div>
       )}

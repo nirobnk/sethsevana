@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { 
+import React, { useMemo, useState } from "react";
+import {
   Plus, 
   Search, 
   Filter, 
@@ -30,7 +30,7 @@ import {
   CheckCircle
 } from "lucide-react";
 
-export const ManageDoctors=()=> {
+export const ManageDoctors = () => {
   const [doctors, setDoctors] = useState([
     {
       id: 1,
@@ -129,50 +129,72 @@ export const ManageDoctors=()=> {
     }
   ]);
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedSpecialty, setSelectedSpecialty] = useState('all');
-  const [selectedStatus, setSelectedStatus] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedSpecialty, setSelectedSpecialty] = useState("all");
+  const [selectedStatus, setSelectedStatus] = useState("all");
   const [showModal, setShowModal] = useState(false);
-  const [modalMode, setModalMode] = useState('add'); // 'add', 'edit', 'view'
+  const [modalMode, setModalMode] = useState("add");
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [formData, setFormData] = useState({
-    name: '',
-    specialty: 'General Medicine',
-    email: '',
-    phone: '',
-    experience: '',
-    qualification: '',
-    location: '',
-    consultationFee: '',
-    bio: '',
-    workingHours: ''
+    name: "",
+    specialty: "General Medicine",
+    email: "",
+    phone: "",
+    experience: "",
+    qualification: "",
+    location: "",
+    consultationFee: "",
+    bio: "",
+    workingHours: "",
   });
 
   const specialties = [
-    'General Medicine', 'Cardiology', 'Neurology', 'Ophthalmology', 
-    'Orthopedics', 'Pediatrics', 'Dermatology', 'Psychiatry', 'Radiology'
+    "General Medicine",
+    "Cardiology",
+    "Neurology",
+    "Ophthalmology",
+    "Orthopedics",
+    "Pediatrics",
+    "Dermatology",
+    "Psychiatry",
+    "Radiology",
   ];
 
   const specialtyIcons = {
-    'General Medicine': Activity,
-    'Cardiology': Heart,
-    'Neurology': Brain,
-    'Ophthalmology': Activity,
-    'Orthopedics': Bone,
-    'Pediatrics': Baby,
-    'Dermatology': Shield,
-    'Psychiatry': Brain,
-    'Radiology': Zap
+    "General Medicine": Activity,
+    Cardiology: Heart,
+    Neurology: Brain,
+    Ophthalmology: Activity,
+    Orthopedics: Bone,
+    Pediatrics: Baby,
+    Dermatology: Shield,
+    Psychiatry: Brain,
+    Radiology: Zap,
   };
 
-  const filteredDoctors = doctors.filter(doctor => {
-    const matchesSearch = doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doctor.specialty.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doctor.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesSpecialty = selectedSpecialty === 'all' || doctor.specialty === selectedSpecialty;
-    const matchesStatus = selectedStatus === 'all' || doctor.status === selectedStatus;
-    return matchesSearch && matchesSpecialty && matchesStatus;
-  });
+  const filteredDoctors = useMemo(() => {
+    const normalizedSearch = searchTerm.trim().toLowerCase();
+    return doctors.filter((doctor) => {
+      const matchesSearch =
+        !normalizedSearch ||
+        doctor.name.toLowerCase().includes(normalizedSearch) ||
+        doctor.specialty.toLowerCase().includes(normalizedSearch) ||
+        doctor.email.toLowerCase().includes(normalizedSearch);
+      const matchesSpecialty =
+        selectedSpecialty === "all" || doctor.specialty === selectedSpecialty;
+      const matchesStatus =
+        selectedStatus === "all" || doctor.status === selectedStatus;
+      return matchesSearch && matchesSpecialty && matchesStatus;
+    });
+  }, [doctors, searchTerm, selectedSpecialty, selectedStatus]);
+
+  const averageRating = useMemo(() => {
+    if (!doctors.length) {
+      return 0;
+    }
+    const total = doctors.reduce((sum, doctor) => sum + (doctor.rating ?? 0), 0);
+    return Number((total / doctors.length).toFixed(1));
+  }, [doctors]);
 
   const openModal = (mode, doctor = null) => {
     setModalMode(mode);
@@ -183,25 +205,25 @@ export const ManageDoctors=()=> {
         specialty: doctor.specialty,
         email: doctor.email,
         phone: doctor.phone,
-        experience: doctor.experience,
+        experience: String(doctor.experience ?? ""),
         qualification: doctor.qualification,
         location: doctor.location,
-        consultationFee: doctor.consultationFee,
+        consultationFee: String(doctor.consultationFee ?? ""),
         bio: doctor.bio,
-        workingHours: doctor.workingHours
+        workingHours: doctor.workingHours,
       });
     } else {
       setFormData({
-        name: '',
-        specialty: 'General Medicine',
-        email: '',
-        phone: '',
-        experience: '',
-        qualification: '',
-        location: '',
-        consultationFee: '',
-        bio: '',
-        workingHours: ''
+        name: "",
+        specialty: "General Medicine",
+        email: "",
+        phone: "",
+        experience: "",
+        qualification: "",
+        location: "",
+        consultationFee: "",
+        bio: "",
+        workingHours: "",
       });
     }
     setShowModal(true);
@@ -212,49 +234,76 @@ export const ManageDoctors=()=> {
     setSelectedDoctor(null);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (modalMode === 'add') {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const experience = Number.parseInt(formData.experience, 10) || 0;
+    const consultationFee = Number.parseInt(formData.consultationFee, 10) || 0;
+    const initials = formData.name
+      .split(" ")
+      .filter(Boolean)
+      .map((part) => part[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase();
+
+    if (modalMode === "add") {
+      const nextId = doctors.length
+        ? Math.max(...doctors.map((doctor) => doctor.id)) + 1
+        : 1;
+
       const newDoctor = {
         ...formData,
-        id: Math.max(...doctors.map(d => d.id)) + 1,
+        id: nextId,
         rating: 0,
-        status: 'active',
-        joinDate: new Date().toISOString().split('T')[0],
+        status: "active",
+        joinDate: new Date().toISOString().split("T")[0],
         patientsCount: 0,
-        image: formData.name.split(' ').map(n => n[0]).join(''),
+        image: initials || "DR",
         specialtyIcon: specialtyIcons[formData.specialty] || Activity,
-        experience: parseInt(formData.experience),
-        consultationFee: parseInt(formData.consultationFee)
+        experience,
+        consultationFee,
       };
-      setDoctors([...doctors, newDoctor]);
-    } else if (modalMode === 'edit') {
-      setDoctors(doctors.map(doctor => 
-        doctor.id === selectedDoctor.id 
-          ? { 
-              ...doctor, 
-              ...formData, 
-              experience: parseInt(formData.experience),
-              consultationFee: parseInt(formData.consultationFee)
-            }
-          : doctor
-      ));
+      setDoctors((prev) => [...prev, newDoctor]);
     }
+
+    if (modalMode === "edit" && selectedDoctor) {
+      setDoctors((prev) =>
+        prev.map((doctor) =>
+          doctor.id === selectedDoctor.id
+            ? {
+                ...doctor,
+                ...formData,
+                experience,
+                consultationFee,
+                specialtyIcon:
+                  specialtyIcons[formData.specialty] ?? doctor.specialtyIcon,
+              }
+            : doctor,
+        ),
+      );
+    }
+
     closeModal();
   };
 
   const handleDelete = (doctorId) => {
-    if (window.confirm('Are you sure you want to delete this doctor?')) {
-      setDoctors(doctors.filter(doctor => doctor.id !== doctorId));
+    if (window.confirm("Are you sure you want to delete this doctor?")) {
+      setDoctors((prev) => prev.filter((doctor) => doctor.id !== doctorId));
     }
   };
 
   const toggleStatus = (doctorId) => {
-    setDoctors(doctors.map(doctor => 
-      doctor.id === doctorId 
-        ? { ...doctor, status: doctor.status === 'active' ? 'inactive' : 'active' }
-        : doctor
-    ));
+    setDoctors((prev) =>
+      prev.map((doctor) =>
+        doctor.id === doctorId
+          ? {
+              ...doctor,
+              status: doctor.status === "active" ? "inactive" : "active",
+            }
+          : doctor,
+      ),
+    );
   };
 
   return (
@@ -323,9 +372,7 @@ export const ManageDoctors=()=> {
             </div>
             <div>
               <p className="text-sm text-gray-500">Avg Rating</p>
-              <p className="text-2xl font-bold text-purple-600">
-                {(doctors.reduce((sum, d) => sum + d.rating, 0) / doctors.length).toFixed(1)}
-              </p>
+              <p className="text-2xl font-bold text-purple-600">{averageRating}</p>
             </div>
           </div>
         </div>

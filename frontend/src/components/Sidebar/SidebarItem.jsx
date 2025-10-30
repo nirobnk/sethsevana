@@ -1,9 +1,9 @@
-import React from "react";
 import { NavLink } from "react-router-dom";
 import { useSidebar } from "./SidebarContext";
 
-export default function SidebarItem({ icon: Icon, label, to, badge }) {
+export default function SidebarItem({ icon, label, to, badge }) {
   const { isOpen, closeMobile } = useSidebar();
+  const IconComponent = icon;
 
   return (
     <NavLink
@@ -23,7 +23,7 @@ export default function SidebarItem({ icon: Icon, label, to, badge }) {
     >
       {({ isActive }) => (
         <>
-          <Icon
+          <IconComponent
             className={`w-5 h-5 flex-shrink-0 ${
               isActive ? "text-white" : "text-gray-600"
             }`}

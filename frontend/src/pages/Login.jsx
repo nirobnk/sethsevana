@@ -1,160 +1,176 @@
-import{ useState } from "react";
+import { useState } from "react";
 import axios from "axios";
-import {
-  Eye,
-  EyeOff,
-  Mail,
-  Lock,
-  Stethoscope,
-  Heart,
-  Activity,
-} from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff, Mail, Lock, Stethoscope } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8080";
 
 export const Login = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [statusMessage, setStatusMessage] = useState("");
   const [formData, setFormData] = useState({ email: "", password: "" });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post(
-        "http://localhost:8080/api/auth/login",
-        formData
-      );
-      if (res.data.message === "Login successful") {
-      alert("Login successful!");
-      console.log(res.data);
-      localStorage.setItem("userEmail", res.data.email);
-      localStorage.setItem("userId", res.data.patientId);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setError("");
+    setStatusMessage("");
 
-        navigate("/profile");
-        
-      } else {
-        alert("Invalid credentials");
+    if (!formData.email || !formData.password) {
+      setError("Please enter both your email and password.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const { data } = await axios.post(
+        `${API_BASE_URL}/api/auth/login`,
+        formData,
+        {
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+
+      const responseMessage = data?.message ?? "Login successful";
+      if (responseMessage.toLowerCase().includes("success")) {
+        if (typeof window !== "undefined") {
+          if (data?.email) {
+            localStorage.setItem("userEmail", data.email);
+          }
+          if (data?.patientId) {
+            localStorage.setItem("userId", String(data.patientId));
+          }
+        }
+
+        setStatusMessage("Login successful! Redirecting to your dashboard...");
+        navigate("/dashboard", { replace: true });
+        return;
       }
-    } catch (err) {
-      console.error("Login error:", err);
-      alert("Something went wrong");
+
+      setError(responseMessage || "Invalid credentials. Please try again.");
+    } catch (errorResponse) {
+      const message =
+        errorResponse.response?.data?.message ??
+        "Unable to sign in at the moment. Please try again later.";
+      setError(message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex pt-14">
-      {/* Right Side - Doctor Image & Animated Text */}
+    <div className="flex min-h-screen pt-16">
       <div
-        className="hidden lg:flex flex-1 relative bg-cover bg-center bg-no-repeat items-center justify-start p-6 xl:p-8"
+        className="relative hidden flex-1 items-center justify-start bg-cover bg-center bg-no-repeat p-6 lg:flex"
         style={{ backgroundImage: "url('./doctor1rem.png')" }}
       >
-        <div className="absolute inset-0 bg-gradient-to-tr from-cyan-800/60 to-transparent"></div>
-        <div className="relative z-10 text-left mt-20 max-w-lg xl:max-w-xl ml-6 xl:ml-12">
-          <p className="text-4xl xl:text-6xl font-bold text-white/95 mb-4 xl:mb-6 tracking-wide drop-shadow-lg leading-tight">
+        <div className="absolute inset-0 bg-gradient-to-tr from-cyan-800/60 to-transparent" />
+        <div className="relative z-10 mt-12 max-w-xl text-left">
+          <p className="text-4xl font-bold leading-tight tracking-wide text-white/95 drop-shadow-lg xl:text-6xl">
             Meet Your Doctor!
           </p>
-          <p className="text-lg xl:text-xl text-white/95 mt-11 mb-6 xl:mb-8 leading-relaxed drop-shadow-sm">
-            Professional healthcare management at your fingertips. Schedule
-            appointments, manage prescriptions, and access your{" "}
-            <span className="text-[#D72C2C] font-bold animate-bounce inline-block ">
-              medical
-            </span>{" "}
+          <p className="mt-8 text-lg leading-relaxed text-white/95 drop-shadow-sm xl:text-xl">
+            Professional healthcare management at your fingertips. Schedule appointments, manage prescriptions, and access your
+            <span className="mx-1 inline-block animate-bounce font-semibold text-[#D72C2C]">medical</span>
             records securely.
           </p>
         </div>
       </div>
 
-      {/* Left Side - Login Form */}
-      <div className="flex-1 flex items-center justify-center p-4 bg-gradient-to-br from-transparent to-cyan-800/60">
+      <div className="flex flex-1 items-center justify-center bg-gradient-to-br from-transparent to-cyan-800/60 p-4">
         <div className="w-full max-w-md lg:max-w-lg">
-          {/* Header */}
-          <div className="text-center mb-6">
-            <div className="mx-auto h-14 w-14 bg-gradient-to-r from-teal-600 to-cyan-600 rounded-full flex items-center justify-center shadow-lg mb-4">
+          <div className="mb-8 text-center">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-r from-teal-600 to-cyan-600 shadow-lg">
               <Stethoscope className="h-7 w-7 text-white" />
             </div>
-            <h1 className="text-2xl sm:text-3xl lg:text-3xl font-bold text-gray-800">
-              Welcome to Seth Sevana
-            </h1>
-            <p className="mt-2 text-teal-700">
-              Your trusted healthcare companion
-            </p>
+            <h1 className="text-3xl font-bold text-gray-800">Welcome to Seth Sevana</h1>
+            <p className="mt-2 text-sm text-teal-700">Your trusted healthcare companion</p>
           </div>
 
-          {/* Login Card */}
-          <div className="border border-teal-100 shadow-2xl bg-white/95 backdrop-blur-lg rounded-xl p-6 ">
-            <h2 className="text-xl text-center text-gray-800 font-bold mb-2">
-              Sign In to Your Account
-            </h2>
-            <p className="text-center text-gray-600 text-sm mb-6">
-              Access your medical dashboard securely
-            </p>
+          <div className="rounded-xl border border-teal-100 bg-white/95 p-6 shadow-2xl backdrop-blur-lg">
+            <h2 className="text-center text-xl font-semibold text-gray-800">Sign In to Your Account</h2>
+            <p className="mt-1 text-center text-sm text-gray-600">Access your medical dashboard securely</p>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Email Field */}
+            <form onSubmit={handleSubmit} className="mt-6 space-y-5">
               <div>
-                <label
-                  htmlFor="email"
-                  className="block text-gray-700 font-medium mb-1"
-                >
+                <label htmlFor="email" className="mb-1 block text-sm font-medium text-gray-700">
                   Email Address
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3.5 h-4 w-4 text-teal-500" />
+                  <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-teal-500" />
                   <input
+                    id="email"
                     name="email"
                     type="email"
                     value={formData.email}
                     onChange={handleChange}
                     placeholder="Enter your email address"
-                    className="w-full pl-10 pr-3 bg-white border border-teal-200 rounded-lg focus:border-teal-500 focus:ring-teal-500 h-11 transition-all duration-300"
+                    autoComplete="email"
+                    className="h-11 w-full rounded-lg border border-teal-200 bg-white pl-10 pr-3 text-sm transition-all duration-300 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
               </div>
 
-              {/* Password Field */}
               <div>
-                <label
-                  htmlFor="password"
-                  className="block text-gray-700 font-medium mb-1"
-                >
+                <label htmlFor="password" className="mb-1 block text-sm font-medium text-gray-700">
                   Password
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-3.5 h-4 w-4 text-teal-500" />
+                  <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-teal-500" />
                   <input
+                    id="password"
                     name="password"
                     type={showPassword ? "text" : "password"}
                     value={formData.password}
                     onChange={handleChange}
                     placeholder="Enter your secure password"
-                    className="w-full pl-10 pr-10 bg-white border border-teal-200 rounded-lg focus:border-teal-500 focus:ring-teal-500 h-11 transition-all duration-300"
+                    autoComplete="current-password"
+                    className="h-11 w-full rounded-lg border border-teal-200 bg-white pl-10 pr-10 text-sm transition-all duration-300 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
                   />
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3.5 text-teal-500 hover:text-teal-700"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-teal-500 transition-colors hover:text-teal-700"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
                   >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
                 </div>
               </div>
 
-              {/* Login Button */}
+              {(error || statusMessage) && (
+                <div className="rounded-lg border border-transparent px-4 py-3 text-sm" aria-live="polite">
+                  {error && <p className="text-red-600">{error}</p>}
+                  {statusMessage && <p className="text-emerald-600">{statusMessage}</p>}
+                </div>
+              )}
+
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white font-semibold h-11 sm:h-12 text-base shadow-lg rounded-lg transform hover:scale-[1.02] transition-all duration-200"
+                disabled={isSubmitting}
+                className="flex h-11 w-full items-center justify-center rounded-lg bg-gradient-to-r from-teal-600 to-cyan-600 text-sm font-semibold text-white shadow-lg transition-all duration-200 hover:from-teal-700 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70"
               >
-                Access My Dashboard
+                {isSubmitting ? "Signing in..." : "Access My Dashboard"}
               </button>
             </form>
+
+            <div className="mt-6 text-center text-sm text-gray-600">
+              Don't have an account?{" "}
+              <Link to="/register" className="font-semibold text-teal-600 hover:text-teal-700">
+                Register now
+              </Link>
+            </div>
           </div>
         </div>
       </div>

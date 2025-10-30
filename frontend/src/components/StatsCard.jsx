@@ -1,13 +1,14 @@
 
 
-export const StatsCard = ({ icon: Icon, label, value, change, color = 'blue' }) => {
+export const StatsCard = ({ icon, label, value, change, color = "blue" }) => {
+  const IconComponent = icon;
   const colors = {
-    blue: 'bg-blue-500',
-    green: 'bg-green-500',
-    purple: 'bg-purple-500',
-    teal: 'bg-teal-500',
-    yellow: 'bg-yellow-500',
-    red: 'bg-red-500'
+    blue: "bg-blue-500",
+    green: "bg-green-500",
+    purple: "bg-purple-500",
+    teal: "bg-teal-500",
+    yellow: "bg-yellow-500",
+    red: "bg-red-500",
   };
 
   return (
@@ -22,8 +23,8 @@ export const StatsCard = ({ icon: Icon, label, value, change, color = 'blue' }) 
             </p>
           )}
         </div>
-        <div className={`${colors[color]} p-3 rounded-lg`}>
-          <Icon className="w-6 h-6 text-white" />
+        <div className={`${colors[color] ?? colors.blue} rounded-lg p-3`}>
+          <IconComponent className="h-6 w-6 text-white" />
         </div>
       </div>
     </div>
